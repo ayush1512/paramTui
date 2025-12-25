@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "param-ssh-tui"
+version = "0.1.0"
+description = "A TUI for working with PARAM-HPC accounts"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Ayush Saxena", email = "ayushsaxena1512@gmail.com"}
+]
+keywords = ["ssh", "slurm", "conda", "tui", "terminal"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+]
+dependencies = [
+    "questionary",
+    "rich",
+]
+
+[project.scripts]
+console-manager = "manager.ui:main_menu"
+
+[project.urls]
+Homepage = "https://github.com/ayush1512/paramtui"
