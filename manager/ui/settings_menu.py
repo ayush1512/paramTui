@@ -26,10 +26,6 @@ def settings_menu(ssh_conn):
             settings.settings_get_profile(ssh_conn)
         elif choice == "SSH Keys":
             settings.settings_list_ssh_keys(ssh_conn)
-        elif choice == "🐚 Shell Configuration":
-            settings.settings_get_default_shell(ssh_conn)
-        elif choice == "🐍 Conda Configuration":
-            settings.settings_get_conda_config(ssh_conn)
         elif choice == "← Back to Main Menu":
             break
         

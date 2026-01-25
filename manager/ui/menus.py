@@ -1,17 +1,8 @@
 """Main menu and connection menu."""
 
-import os
 import questionary
-from dotenv import load_dotenv
 from manager.ui.styles import custom_style, print_header, console
 from manager.connection import SSHConnection
-
-env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'user.env')
-load_dotenv(env_path)
-
-DEFAULT_HOST = os.getenv('DEFAULT_HOST', 'localhost')
-DEFAULT_USER = os.getenv('DEFAULT_USER', '')
-DEFAULT_PORT = os.getenv('DEFAULT_PORT', '22')
 
 def connection_menu():
     """Initial menu to establish SSH connection."""
@@ -20,7 +11,7 @@ def connection_menu():
     
     host = questionary.text(
         "🌐 Enter Host PARAM IP or Domain:",
-        default=DEFAULT_HOST,
+        default="",
         style=custom_style
     ).ask()
     if not host:
@@ -28,7 +19,7 @@ def connection_menu():
     
     user = questionary.text(
         "👤 Enter Username:",
-        default=DEFAULT_USER,
+        default="",
         style=custom_style
     ).ask()
     if not user:
@@ -36,7 +27,7 @@ def connection_menu():
     
     port = questionary.text(
         "🔌 Enter Port:",
-        default=DEFAULT_PORT,
+        default="22",
         style=custom_style
     ).ask()
     if not port:

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "paramtui"
-version = "0.1.0"
+version = "0.1.1"
 description = "A modern terminal user interface for managing HPC clusters via SSH"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -29,7 +29,6 @@ classifiers = [
 dependencies = [
     "questionary>=2.0.0",
     "rich>=13.0.0",
-    "python-dotenv>=1.0.0",
 ]
 
 [project.urls]
