@@ -1,9 +1,17 @@
 """Main menu and connection menu."""
 
+import os
 import questionary
+from dotenv import load_dotenv
 from manager.ui.styles import custom_style, print_header, console
 from manager.connection import SSHConnection
 
+env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'user.env')
+load_dotenv(env_path)
+
+DEFAULT_HOST = os.getenv('DEFAULT_HOST', 'localhost')
+DEFAULT_USER = os.getenv('DEFAULT_USER', '')
+DEFAULT_PORT = os.getenv('DEFAULT_PORT', '22')
 
 def connection_menu():
     """Initial menu to establish SSH connection."""
@@ -12,7 +20,7 @@ def connection_menu():
     
     host = questionary.text(
         "🌐 Enter Host PARAM IP or Domain:",
-        default="paramutkarsh.cdac.in",
+        default=DEFAULT_HOST,
         style=custom_style
     ).ask()
     if not host:
@@ -20,7 +28,7 @@ def connection_menu():
     
     user = questionary.text(
         "👤 Enter Username:",
-        default="",
+        default=DEFAULT_USER,
         style=custom_style
     ).ask()
     if not user:
@@ -28,7 +36,7 @@ def connection_menu():
     
     port = questionary.text(
         "🔌 Enter Port:",
-        default="4422",
+        default=DEFAULT_PORT,
         style=custom_style
     ).ask()
     if not port:
@@ -46,7 +54,6 @@ def connection_menu():
 
 def main_menu():
     """Main menu after SSH connection is established."""
-    # Import here to avoid circular imports
     from manager.ui.file_manager import file_manager_menu
     from manager.ui.job_dashboard import job_dashboard_menu
     from manager.ui.job_templates import job_templates_menu
@@ -60,13 +67,11 @@ def main_menu():
     from manager.ui.help_menu import help_menu
     from manager.ui.tunnel_menu import tunnel_menu
     
-    # Step 1: Establish SSH Connection
     ssh_conn = connection_menu()
     
     if not ssh_conn:
         return
     
-    # Step 2: Show management options
     while True:
         console.clear()
         print_header(ssh_conn)
@@ -77,16 +82,13 @@ def main_menu():
                 questionary.Separator("─── Core Features ───"),
                 "📁 File Manager",
                 "📊 Job Dashboard",
-                # "🧾 Job Templates",
                 "🐍 Conda Package Manager",
                 questionary.Separator("─── HPC Tools ───"),
-                # "🧩 Software Modules",
                 "🧠 Interactive Tools",
                 "🖥️  Resource Monitor",
                 questionary.Separator("─── System ───"),
                 "📈 Usage & Quota",
                 "🧪 Logs",
-                "🔗 SSH Tunnel",
                 "🖥️  Interactive Shell",
                 questionary.Separator("─── Settings & Help ───"),
                 "👤 User Settings",
@@ -105,8 +107,6 @@ def main_menu():
             job_templates_menu(ssh_conn)
         elif choice == "🐍 Conda Package Manager":
             conda_menu(ssh_conn)
-        elif choice == "🧩 Software Modules":
-            modules_menu(ssh_conn)
         elif choice == "🧠 Interactive Tools":
             interactive_tools_menu(ssh_conn)
         elif choice == "🖥️  Resource Monitor":
@@ -115,8 +115,6 @@ def main_menu():
             usage_quota_menu(ssh_conn)
         elif choice == "🧪 Logs":
             logs_menu(ssh_conn)
-        elif choice == "🔗 SSH Tunnel":
-            tunnel_menu(ssh_conn)
         elif choice == "🖥️  Interactive Shell":
             ssh_conn.interactive_shell()
             questionary.press_any_key_to_continue(style=custom_style).ask()

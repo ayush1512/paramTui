@@ -4,7 +4,6 @@ DEPRECATED: This module is kept for backward compatibility.
 Please import from manager.connection and manager.commands instead.
 """
 
-# Re-export everything from the new modules for backward compatibility
 from manager.connection import SSHConnection
 from manager.templates import JOB_TEMPLATES
 from manager.commands.slurm import *
@@ -18,7 +17,6 @@ from manager.commands.settings import *
 from manager.commands.help import *
 from manager.commands.tunnel import *
 
-# Legacy local system functions
 import subprocess
 import platform
 from rich.console import Console

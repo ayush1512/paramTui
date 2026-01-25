@@ -4,7 +4,6 @@ DEPRECATED: This module is kept for backward compatibility.
 Please import from manager.ui submodules instead.
 """
 
-# Re-export everything from the new UI modules for backward compatibility
 from manager.ui.styles import custom_style, print_header, console
 from manager.ui.menus import main_menu, connection_menu
 from manager.ui.file_manager import file_manager_menu

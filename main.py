@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """ParamTUI - SSH Manager & HPC Console.
 
 A modern terminal user interface for managing HPC clusters.

@@ -16,8 +16,6 @@ def settings_menu(ssh_conn):
             choices=[
                 "View Profile",
                 "SSH Keys",
-                # "Shell Configuration",
-                # "Conda Configuration",
                 questionary.Separator(),
                 "← Back to Main Menu"
             ],

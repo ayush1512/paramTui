@@ -24,26 +24,22 @@ class SSHConnection:
         try:
             console.print(f"[bold yellow]Connecting to {user}@{host}:{port}...[/bold yellow]")
             
-            # Store connection details
             self.host = host
             self.user = user
             self.port = port
             
-            # Create a unique control path for this connection
             self.control_path = os.path.join(tempfile.gettempdir(), f"ssh-{user}-{host}-{port}")
             
             console.print(f"[dim]Establishing persistent connection...[/dim]\n")
             console.print("[bold cyan]Please complete authentication:[/bold cyan]")
             
-            # First, establish connection interactively without background flag
             initial_command = f"ssh -M -S {self.control_path} -o ControlPersist=10m -p {port} {user}@{host} 'echo CONNECTION_SUCCESS'"
             
             result = subprocess.run(initial_command, shell=True, text=True, capture_output=True)
             
             if result.returncode == 0 and "CONNECTION_SUCCESS" in result.stdout:
-                time.sleep(1)  # Give it a moment to establish
+                time.sleep(1)
                 
-                # Test if the persistent connection is working
                 test_command = f"ssh -S {self.control_path} -O check {user}@{host} 2>&1"
                 test_result = subprocess.run(
                     test_command, 

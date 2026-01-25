@@ -40,7 +40,3 @@ def logs_get_error_logs(ssh_conn, pattern="*.err"):
     console.print("[yellow]No recent error logs found.[/yellow]")
     return []
 
-
-# def logs_download(ssh_conn, log_path, local_path="."):
-#     """Download a log file."""
-#     return file_download(ssh_conn, log_path, local_path)

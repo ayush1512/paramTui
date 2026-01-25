@@ -18,8 +18,6 @@ def resource_monitor_menu(ssh_conn):
                 "Memory Usage",
                 "GPU Utilization",
                 "Node Availability",
-                # "📈 Load Average",
-                # "🌐 Network Usage",
                 questionary.Separator(),
                 "← Back to Main Menu"
             ],
@@ -34,10 +32,6 @@ def resource_monitor_menu(ssh_conn):
             resources.resource_gpu_usage(ssh_conn)
         elif choice == "Node Availability":
             resources.resource_node_availability(ssh_conn)
-        # elif choice == "📈 Load Average":
-        #     resources.resource_load_average(ssh_conn)
-        # elif choice == "🌐 Network Usage":
-            # resources.resource_network_usage(ssh_conn)
         elif choice == "← Back to Main Menu":
             break
         

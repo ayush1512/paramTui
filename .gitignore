@@ -5,3 +5,7 @@ features.png
 **/__pycache__/
 .DS_Store
 **/*.py[cod]
+/manager/__pycache__
+/manager/commands/__pycache__
+/manager/ui/__pycache__
+user.env

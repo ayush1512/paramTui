@@ -23,7 +23,7 @@ def file_browse_directory(ssh_conn, path="~"):
         table.add_column("Modified", style="magenta")
         table.add_column("Name", style="bold white")
         
-        lines = output.strip().split('\n')[1:]  # Skip 'total' line
+        lines = output.strip().split('\n')[1:]
         for line in lines:
             parts = line.split(None, 8)
             if len(parts) >= 9:
@@ -140,19 +140,27 @@ def file_view_content(ssh_conn, path, lines=50):
         return True
     return False
 
-
-def file_search(ssh_conn, directory, pattern):
+def file_search(ssh_conn, path, pattern, depth):
     """Search for files by name pattern."""
-    output = ssh_conn.execute_command(f"find {directory} -name '*{pattern}*' | head -50")
-    if output:
-        console.print(f"[bold green]🔍 Search results for '{pattern}':[/bold green]")
-        for line in output.strip().split('\n'):
-            if line:
-                console.print(f"  📄 {line}")
+    console.print(f"[bold cyan]Searching for '{pattern}' in {path}...[/bold cyan]\n")
+    cmd1 = f'find {path} -maxdepth 1 -name "*{pattern}*" | head -50'
+    output = ssh_conn.execute_command(cmd1)
+    
+    if output and output.strip() and not depth:
+        console.print("[bold green]Files found in depth:[/bold green]")
+        console.print(output)
         return True
-    console.print("[yellow]No files found matching the pattern.[/yellow]")
-    return False
-
+    else:
+        cmd2 = f'find {path} -name "*{pattern}*" | head -50'
+        output = ssh_conn.execute_command(cmd2)
+        
+        if output and output.strip():
+            console.print("[bold green]Files found (recursive search):[/bold green]")
+            console.print(output)
+            return True
+        else:
+            console.print("[yellow]No files found matching the pattern.[/yellow]")
+            return False
 
 def file_disk_quota(ssh_conn, path="~"):
     """Get disk usage for a directory."""
@@ -170,7 +178,6 @@ def file_disk_quota(ssh_conn, path="~"):
         
         console.print(table)
         
-        # Also show quota if available
         quota_output = ssh_conn.execute_command("lfs quota -h ~/")
         if quota_output:
             console.print("\n[bold cyan]Quota Information:[/bold cyan]")

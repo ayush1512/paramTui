@@ -19,7 +19,6 @@ def file_manager_menu(ssh_conn):
             choices=[
                 "📂 Browse Current Directory",
                 "🏠 Go to Home Directory",
-                # "💾 Go to Scratch Directory",
                 "📁 Change Directory",
                 questionary.Separator("─── File Operations ───"),
                 "⬆️  Upload File",
@@ -101,8 +100,9 @@ def file_manager_menu(ssh_conn):
                 files.file_view_content(ssh_conn, path)
         elif choice == "🔍 Search Files":
             pattern = questionary.text("Search pattern:", style=custom_style).ask()
+            depth = questionary.confirm("Depth:", default=False, style=custom_style).ask()
             if pattern:
-                files.file_search(ssh_conn, current_path, pattern)
+                files.file_search(ssh_conn, current_path, pattern, depth)
         elif choice == "📊 View Disk Usage":
             files.file_disk_quota(ssh_conn, current_path)
         elif choice == "← Back to Main Menu":

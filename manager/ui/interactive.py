@@ -14,9 +14,6 @@ def interactive_tools_menu(ssh_conn):
         choice = questionary.select(
             "🧠 Interactive Tools:",
             choices=[
-                "📓 Start Jupyter Notebook",
-                "🔬 Start JupyterLab",
-                "📋 List Active Notebooks",
                 "🎮 GPU Interactive Session",
                 "🖥️  CPU Interactive Session",
                 questionary.Separator(),
@@ -25,22 +22,7 @@ def interactive_tools_menu(ssh_conn):
             style=custom_style
         ).ask()
         
-        if choice in ["📓 Start Jupyter Notebook", "🔬 Start JupyterLab"]:
-            jupyter_type = "notebook" if "Notebook" in choice else "lab"
-            
-            conda_env = questionary.text("Conda environment:", default="base", style=custom_style).ask()
-            num_gpus = questionary.text("Number of GPUs (0 for CPU only):", default="0", style=custom_style).ask()
-            port = questionary.text("Port:", default="8888", style=custom_style).ask()
-            
-            if conda_env and port:
-                job_templates.interactive_start_jupyter(
-                    ssh_conn, 
-                    jupyter_type=jupyter_type,
-                    conda_env=conda_env,
-                    num_gpus=int(num_gpus) if num_gpus else 0,
-                    port=int(port) if port else 8888
-                )
-        elif choice == "🎮 GPU Interactive Session":
+        if choice == "🎮 GPU Interactive Session":
             num_gpus = questionary.text("Number of GPUs:", default="1", style=custom_style).ask()
             time_limit = questionary.text("Time limit (HH:MM:SS):", default="02:00:00", style=custom_style).ask()
             memory = questionary.text("Memory:", default="16G", style=custom_style).ask()
@@ -63,10 +45,6 @@ def interactive_tools_menu(ssh_conn):
                     time=time_limit,
                     core=cores,
                 )
-        elif choice == "📋 List Active Notebooks":
-            job_templates.interactive_list_notebooks(ssh_conn)
-        elif choice == "🖥️  Interactive Shell":
-            ssh_conn.interactive_shell()
         elif choice == "← Back to Main Menu":
             break
         

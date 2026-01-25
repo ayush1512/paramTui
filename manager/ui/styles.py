@@ -6,7 +6,6 @@ from rich.console import Console
 
 console = Console()
 
-# Custom questionary style for better appearance
 custom_style = Style([
     ('qmark', 'fg:#673ab7 bold'),
     ('question', 'bold'),
