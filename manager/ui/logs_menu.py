@@ -17,8 +17,8 @@ def logs_menu(ssh_conn):
                 "📋 SSH Session History",
                 "📝 Job Submission History",
                 "❌ Find Error Logs",
-                "📄 View Specific Log File",
-                "⬇️  Download Log File",
+                # "📄 View Specific Log File",
+                # "⬇️  Download Log File",
                 questionary.Separator(),
                 "← Back to Main Menu"
             ],
@@ -32,15 +32,15 @@ def logs_menu(ssh_conn):
             logs.logs_get_job_submission_history(ssh_conn, int(days) if days else 7)
         elif choice == "❌ Find Error Logs":
             logs.logs_get_error_logs(ssh_conn)
-        elif choice == "📄 View Specific Log File":
-            log_path = questionary.text("Log file path:", style=custom_style).ask()
-            if log_path:
-                files.file_view_content(ssh_conn, log_path, 100)
-        elif choice == "⬇️  Download Log File":
-            remote = questionary.text("Remote log path:", style=custom_style).ask()
-            local = questionary.text("Local destination:", default="./", style=custom_style).ask()
-            if remote:
-                logs.logs_download(ssh_conn, remote, local)
+        # elif choice == "📄 View Specific Log File":
+        #     log_path = questionary.text("Log file path:", style=custom_style).ask()
+        #     if log_path:
+        #         files.file_view_content(ssh_conn, log_path, 100)
+        # elif choice == "⬇️  Download Log File":
+        #     remote = questionary.text("Remote log path:", style=custom_style).ask()
+        #     local = questionary.text("Local destination:", default="./", style=custom_style).ask()
+        #     if remote:
+        #         logs.logs_download(ssh_conn, remote, local)
         elif choice == "← Back to Main Menu":
             break
         

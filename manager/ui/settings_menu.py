@@ -12,21 +12,21 @@ def settings_menu(ssh_conn):
         print_header(ssh_conn)
         
         choice = questionary.select(
-            "👤 User Settings:",
+            "User Settings:",
             choices=[
-                "👤 View Profile",
-                "🔐 SSH Keys",
-                "🐚 Shell Configuration",
-                "🐍 Conda Configuration",
+                "View Profile",
+                "SSH Keys",
+                # "Shell Configuration",
+                # "Conda Configuration",
                 questionary.Separator(),
                 "← Back to Main Menu"
             ],
             style=custom_style
         ).ask()
         
-        if choice == "👤 View Profile":
+        if choice == "View Profile":
             settings.settings_get_profile(ssh_conn)
-        elif choice == "🔐 SSH Keys":
+        elif choice == "SSH Keys":
             settings.settings_list_ssh_keys(ssh_conn)
         elif choice == "🐚 Shell Configuration":
             settings.settings_get_default_shell(ssh_conn)

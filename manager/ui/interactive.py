@@ -16,9 +16,9 @@ def interactive_tools_menu(ssh_conn):
             choices=[
                 "📓 Start Jupyter Notebook",
                 "🔬 Start JupyterLab",
-                "🎮 GPU Interactive Session",
                 "📋 List Active Notebooks",
-                "🖥️  Interactive Shell",
+                "🎮 GPU Interactive Session",
+                "🖥️  CPU Interactive Session",
                 questionary.Separator(),
                 "← Back to Main Menu"
             ],
@@ -51,6 +51,17 @@ def interactive_tools_menu(ssh_conn):
                     num_gpus=int(num_gpus),
                     time=time_limit,
                     mem=memory
+                )
+        elif choice == "🖥️  CPU Interactive Session":
+            num_cpus = questionary.text("Number of CPUs:", default="1", style=custom_style).ask()
+            time_limit = questionary.text("Time limit (HH:MM:SS):", default="02:00:00", style=custom_style).ask()
+            cores = questionary.text("Number of cpus required per task:", default="40", style=custom_style).ask()
+            if num_cpus and time_limit:
+                job_templates.interactive_cpu_session(
+                    ssh_conn,
+                    num_cpus=int(num_cpus),
+                    time=time_limit,
+                    core=cores,
                 )
         elif choice == "📋 List Active Notebooks":
             job_templates.interactive_list_notebooks(ssh_conn)

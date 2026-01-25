@@ -24,7 +24,7 @@ def settings_get_profile(ssh_conn):
 
 def settings_list_ssh_keys(ssh_conn):
     """List SSH keys."""
-    output = ssh_conn.execute_command("ls -la ~/.ssh/ 2>/dev/null")
+    output = ssh_conn.execute_command("ls -la ~/.ssh/")
     if output:
         console.print(Panel(output, title="🔐 SSH Keys", border_style="green"))
         return True
@@ -43,7 +43,7 @@ def settings_get_default_shell(ssh_conn):
 
 def settings_get_conda_config(ssh_conn):
     """Get Conda configuration."""
-    output = ssh_conn.execute_command("conda config --show 2>/dev/null | head -30")
+    output = ssh_conn.execute_command("conda config --show | head -30")
     if output:
         console.print(Panel(output, title="🐍 Conda Configuration", border_style="green"))
         return True

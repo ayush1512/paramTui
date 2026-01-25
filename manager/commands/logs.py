@@ -11,7 +11,7 @@ console = Console()
 
 def logs_get_session_history(ssh_conn, lines=50):
     """Get SSH session history."""
-    output = ssh_conn.execute_command(f"last -n {lines} $USER 2>/dev/null || last -n {lines}")
+    output = ssh_conn.execute_command(f"last -n {lines} $USER || last -n {lines}")
     if output:
         console.print(Panel(output, title="📋 Session History", border_style="cyan"))
         return True
@@ -21,7 +21,7 @@ def logs_get_session_history(ssh_conn, lines=50):
 def logs_get_job_submission_history(ssh_conn, days=7):
     """Get job submission history."""
     start_date = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
-    output = ssh_conn.execute_command(f"sacct -u $USER -S {start_date} -o JobID,JobName,Submit,Start,End,State -n 2>/dev/null | head -50")
+    output = ssh_conn.execute_command(f"sacct -u $USER -S {start_date} -o JobID,JobName,Submit,Start,End,State | head -50")
     if output:
         console.print(Panel(output, title=f"📝 Job Submission History (Last {days} days)", border_style="green"))
         return True
@@ -30,7 +30,7 @@ def logs_get_job_submission_history(ssh_conn, days=7):
 
 def logs_get_error_logs(ssh_conn, pattern="*.err"):
     """Find and list recent error logs."""
-    output = ssh_conn.execute_command(f"find ~ -name '{pattern}' -mtime -7 -type f 2>/dev/null | head -20")
+    output = ssh_conn.execute_command(f"find ~ -name '{pattern}' -mtime -7 -type f  | head -20")
     if output:
         console.print("[bold cyan]📋 Recent Error Logs:[/bold cyan]")
         for log in output.strip().split('\n'):
@@ -41,6 +41,6 @@ def logs_get_error_logs(ssh_conn, pattern="*.err"):
     return []
 
 
-def logs_download(ssh_conn, log_path, local_path="."):
-    """Download a log file."""
-    return file_download(ssh_conn, log_path, local_path)
+# def logs_download(ssh_conn, log_path, local_path="."):
+#     """Download a log file."""
+#     return file_download(ssh_conn, log_path, local_path)

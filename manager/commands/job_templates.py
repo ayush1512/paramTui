@@ -107,6 +107,19 @@ def interactive_gpu_session(ssh_conn, num_gpus=1, time="02:00:00", mem="16G"):
     except Exception as e:
         console.print(f"[bold red]Session error: {str(e)}[/bold red]")
 
+def interactive_cpu_session(ssh_conn, num_cpus=1, time="02:00:00", core="40"):
+    """Start an interactive GPU session."""
+    console.print(f"[bold yellow]Starting interactive CPU session ({num_cpus} CPU(s))...[/bold yellow]")
+    console.print("[dim]This will open an interactive shell. Type 'exit' to end the session.[/dim]\n")
+    
+    cmd = f"srun --partition=cpu -N {num_cpus} --time={time} -c {core} --pty bash"
+    try:
+        subprocess.run(
+            f"ssh -S {ssh_conn.control_path} -t -p {ssh_conn.port} {ssh_conn.user}@{ssh_conn.host} '{cmd}'",
+            shell=True
+        )
+    except Exception as e:
+        console.print(f"[bold red]Session error: {str(e)}[/bold red]")
 
 def interactive_list_notebooks(ssh_conn):
     """List running Jupyter jobs."""

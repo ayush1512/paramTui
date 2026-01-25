@@ -19,6 +19,7 @@ def conda_menu(ssh_conn):
                 "➕ Create Environment",
                 "➖ Remove Environment",
                 "📦 Install Package",
+                "📦 List Package",
                 questionary.Separator(),
                 "← Back to Main Menu"
             ],
@@ -46,6 +47,10 @@ def conda_menu(ssh_conn):
             package = questionary.text("Package name:", style=custom_style).ask()
             if env_name and package:
                 conda.conda_install_package(ssh_conn, env_name, package)
+        elif choice == "📦 List Package":
+            env_name = questionary.text("Environment name:", style=custom_style).ask()
+            if env_name:
+                conda.conda_list_package(ssh_conn, env_name)
         elif choice == "← Back to Main Menu":
             break
         

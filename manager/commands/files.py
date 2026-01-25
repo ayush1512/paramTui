@@ -12,7 +12,7 @@ console = Console()
 
 def file_browse_directory(ssh_conn, path="~"):
     """Browse a directory and show files with details."""
-    cmd = f"ls -la {path} 2>/dev/null"
+    cmd = f"ls -la {path}"
     output = ssh_conn.execute_command(cmd)
     if output:
         table = Table(title=f"📁 Directory: {path}", box=box.ROUNDED)
@@ -48,7 +48,7 @@ def file_get_home_path(ssh_conn):
 
 def file_get_scratch_path(ssh_conn):
     """Get user's scratch directory."""
-    output = ssh_conn.execute_command("echo $SCRATCH 2>/dev/null || echo ~/scratch")
+    output = ssh_conn.execute_command("echo ~/scratch")
     return output.strip()
 
 
@@ -85,7 +85,20 @@ def file_download(ssh_conn, remote_path, local_path):
         console.print(f"[bold red]✗ Download error: {str(e)}[/bold red]")
         return False
 
-
+def file_edit(ssh_conn, path, filename):
+    """Edit file."""
+    console.print(f"[bold yellow]Starting nano editor...[/bold yellow]")
+    
+    cmd = f"nano {path}/{filename}"
+    try:
+        subprocess.run(
+            f"ssh -S {ssh_conn.control_path} -t -p {ssh_conn.port} {ssh_conn.user}@{ssh_conn.host} '{cmd}'",
+            shell=True
+        )
+    except Exception as e:
+        console.print(f"[bold red]Session error: {str(e)}[/bold red]")
+    
+    
 def file_create_directory(ssh_conn, path):
     """Create a new directory."""
     output = ssh_conn.execute_command(f"mkdir -p {path} && echo 'SUCCESS'")
@@ -130,7 +143,7 @@ def file_view_content(ssh_conn, path, lines=50):
 
 def file_search(ssh_conn, directory, pattern):
     """Search for files by name pattern."""
-    output = ssh_conn.execute_command(f"find {directory} -name '*{pattern}*' 2>/dev/null | head -50")
+    output = ssh_conn.execute_command(f"find {directory} -name '*{pattern}*' | head -50")
     if output:
         console.print(f"[bold green]🔍 Search results for '{pattern}':[/bold green]")
         for line in output.strip().split('\n'):
@@ -143,7 +156,7 @@ def file_search(ssh_conn, directory, pattern):
 
 def file_disk_quota(ssh_conn, path="~"):
     """Get disk usage for a directory."""
-    output = ssh_conn.execute_command(f"du -sh {path}/* 2>/dev/null | sort -hr | head -20")
+    output = ssh_conn.execute_command(f"du -h {path} | sort -hr | head -20")
     if output:
         table = Table(title=f"💾 Disk Usage: {path}", box=box.ROUNDED)
         table.add_column("Size", style="yellow", justify="right")
@@ -158,7 +171,7 @@ def file_disk_quota(ssh_conn, path="~"):
         console.print(table)
         
         # Also show quota if available
-        quota_output = ssh_conn.execute_command("quota -s 2>/dev/null || lfs quota -h ~ 2>/dev/null")
+        quota_output = ssh_conn.execute_command("lfs quota -h ~/")
         if quota_output:
             console.print("\n[bold cyan]Quota Information:[/bold cyan]")
             console.print(quota_output)

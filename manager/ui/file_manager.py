@@ -19,11 +19,12 @@ def file_manager_menu(ssh_conn):
             choices=[
                 "📂 Browse Current Directory",
                 "🏠 Go to Home Directory",
-                "💾 Go to Scratch Directory",
+                # "💾 Go to Scratch Directory",
                 "📁 Change Directory",
                 questionary.Separator("─── File Operations ───"),
                 "⬆️  Upload File",
                 "⬇️  Download File",
+                "📄 Edit File",
                 "📄 Create File/Directory",
                 "✏️  Rename File/Directory",
                 "🗑️  Delete File/Directory",
@@ -64,6 +65,11 @@ def file_manager_menu(ssh_conn):
             local = questionary.text("Local destination:", default="./", style=custom_style).ask()
             if remote and local:
                 files.file_download(ssh_conn, remote, local)
+        elif choice == "📄 Edit File":
+            file_name = questionary.text("File Name:", style=custom_style).ask()
+            if file_name:
+                path = f"{current_path}"
+                files.file_edit(ssh_conn, path, file_name)
         elif choice == "📄 Create File/Directory":
             file_type = questionary.select(
                 "Create:",
