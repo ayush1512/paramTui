@@ -1,0 +1,7 @@
+changes.txt
+features.dot
+features.png
+.venv
+**/__pycache__/
+.DS_Store
+**/*.py[cod]
