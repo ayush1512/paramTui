@@ -17,7 +17,6 @@ def resource_monitor_menu(ssh_conn):
                 "CPU Usage",
                 "Memory Usage",
                 "GPU Utilization",
-                "Node Availability",
                 questionary.Separator(),
                 "← Back to Main Menu"
             ],
@@ -30,8 +29,6 @@ def resource_monitor_menu(ssh_conn):
             resources.resource_memory_usage(ssh_conn)
         elif choice == "GPU Utilization":
             resources.resource_gpu_usage(ssh_conn)
-        elif choice == "Node Availability":
-            resources.resource_node_availability(ssh_conn)
         elif choice == "← Back to Main Menu":
             break
         

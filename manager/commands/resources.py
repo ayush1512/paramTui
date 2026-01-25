@@ -35,16 +35,6 @@ def resource_gpu_usage(ssh_conn):
         return True
     return False
 
-
-def resource_node_availability(ssh_conn):
-    """Get node availability from SLURM."""
-    output = ssh_conn.execute_command("sinfo -o '%20P %5a %10l %6D %8t %N'")
-    if output is None:
-        
-        
-        return False
-
-
 def get_remote_system_info(ssh_conn):
     """Get system information from remote server."""
     output = ssh_conn.execute_command("uname -a && df -h && free -h")
