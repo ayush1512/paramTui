@@ -16,6 +16,7 @@ from manager.commands.logs import *
 from manager.commands.settings import *
 from manager.commands.help import *
 from manager.commands.tunnel import *
+from manager.config import *
 
 import subprocess
 import platform

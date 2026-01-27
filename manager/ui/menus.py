@@ -3,44 +3,83 @@
 import questionary
 from manager.ui.styles import custom_style, print_header, console
 from manager.connection import SSHConnection
+from manager.config import load_config, save_config
 
 def connection_menu():
     """Initial menu to establish SSH connection."""
     console.clear()
     print_header()
     
-    host = questionary.text(
-        "🌐 Enter Host PARAM IP or Domain:",
-        default="",
-        style=custom_style
-    ).ask()
-    if not host:
-        return None
+    # Load saved config if exists
+    config = load_config()
     
-    user = questionary.text(
-        "👤 Enter Username:",
-        default="",
-        style=custom_style
-    ).ask()
-    if not user:
-        return None
+    # Ask if user wants to use saved config
+    if config:
+        use_saved = questionary.confirm(
+            f"Use saved connection ({config.get('user')}@{config.get('host')}:{config.get('port')})?",
+            default=True,
+            style=custom_style
+        ).ask()
+        
+        if use_saved:
+            host = config.get('host')
+            user = config.get('user')
+            port = config.get('port')
+        else:
+            host, user, port = ask_connection_details(config)
+    else:
+        host, user, port = ask_connection_details({})
     
-    port = questionary.text(
-        "🔌 Enter Port:",
-        default="22",
-        style=custom_style
-    ).ask()
-    if not port:
+    if not all([host, user, port]):
         return None
     
     ssh_conn = SSHConnection()
     success = ssh_conn.connect(host, user, port)
     
     if success:
+        # Ask if user wants to save the connection details
+        if not config or config.get('host') != host or config.get('user') != user or config.get('port') != port:
+            save_choice = questionary.confirm(
+                "Save these connection details for next time?",
+                default=True,
+                style=custom_style
+            ).ask()
+            
+            if save_choice:
+                save_config(host, user, port)
+        
         return ssh_conn
     else:
         console.print("[bold red]Failed to connect. Exiting...[/bold red]")
         return None
+
+def ask_connection_details(config):
+    """Ask user for connection details with defaults from config."""
+    host = questionary.text(
+        "🌐 Enter Host PARAM IP or Domain:",
+        default=config.get('host', ''),
+        style=custom_style
+    ).ask()
+    if not host:
+        return None, None, None
+    
+    user = questionary.text(
+        "👤 Enter Username:",
+        default=config.get('user', ''),
+        style=custom_style
+    ).ask()
+    if not user:
+        return None, None, None
+    
+    port = questionary.text(
+        "🔌 Enter Port:",
+        default=config.get('port', '22'),
+        style=custom_style
+    ).ask()
+    if not port:
+        return None, None, None
+    
+    return host, user, port
 
 
 def main_menu():

@@ -10,9 +10,14 @@ A modern Terminal User Interface (TUI) for managing HPC clusters via SSH.
 - 🧠 **Interactive Tools** - Launch interactive sessions
 - 🖥️ **Resource Monitor** - Check system resources
 - 📈 **Usage & Quota** - Monitor disk usage
-- 🔗 **SSH Tunnel** - Manage SSH tunnels
+- 🖥️ **Interactive Shell** - Access the shell
 
 ## Installation
 
 ```bash
 pip install paramtui
+
+## Run
+
+```bash
+paramtui
