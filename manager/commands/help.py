@@ -154,7 +154,7 @@ def help_about():
 A modern terminal user interface for managing HPC clusters.
 
 [bold green]Features:[/bold green]
-  • SSH connection management with ControlMaster
+  • Persistent SSH session management via Paramiko (Cross-platform)
   • SLURM job submission and monitoring
   • File management (upload/download/browse)
   • Conda environment management

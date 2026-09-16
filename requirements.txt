@@ -1,3 +1,4 @@
 questionary
 rich
 python-dotenv
+paramiko>=3.4.0

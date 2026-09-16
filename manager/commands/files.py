@@ -1,6 +1,5 @@
 """File management commands."""
 
-import subprocess
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
@@ -54,49 +53,27 @@ def file_get_scratch_path(ssh_conn):
 
 def file_upload(ssh_conn, local_path, remote_path):
     """Upload a file to the remote server."""
-    try:
-        cmd = f"scp -P {ssh_conn.port} -o ControlPath={ssh_conn.control_path} {local_path} {ssh_conn.user}@{ssh_conn.host}:{remote_path}"
-        console.print(f"[bold yellow]Uploading {local_path} to {remote_path}...[/bold yellow]")
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-        if result.returncode == 0:
-            console.print("[bold green]✓ Upload successful![/bold green]")
-            return True
-        else:
-            console.print(f"[bold red]✗ Upload failed: {result.stderr}[/bold red]")
-            return False
-    except Exception as e:
-        console.print(f"[bold red]✗ Upload error: {str(e)}[/bold red]")
-        return False
+    console.print(f"[bold yellow]Uploading {local_path} to {remote_path}...[/bold yellow]")
+    if ssh_conn.upload_file(local_path, remote_path):
+        console.print("[bold green]✓ Upload successful![/bold green]")
+        return True
+    return False
 
 
 def file_download(ssh_conn, remote_path, local_path):
     """Download a file from the remote server."""
-    try:
-        cmd = f"scp -P {ssh_conn.port} -o ControlPath={ssh_conn.control_path} {ssh_conn.user}@{ssh_conn.host}:{remote_path} {local_path}"
-        console.print(f"[bold yellow]Downloading {remote_path} to {local_path}...[/bold yellow]")
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-        if result.returncode == 0:
-            console.print("[bold green]✓ Download successful![/bold green]")
-            return True
-        else:
-            console.print(f"[bold red]✗ Download failed: {result.stderr}[/bold red]")
-            return False
-    except Exception as e:
-        console.print(f"[bold red]✗ Download error: {str(e)}[/bold red]")
-        return False
+    console.print(f"[bold yellow]Downloading {remote_path} to {local_path}...[/bold yellow]")
+    if ssh_conn.download_file(remote_path, local_path):
+        console.print("[bold green]✓ Download successful![/bold green]")
+        return True
+    return False
+
 
 def file_edit(ssh_conn, path, filename):
     """Edit file."""
     console.print(f"[bold yellow]Starting nano editor...[/bold yellow]")
-    
     cmd = f"nano {path}/{filename}"
-    try:
-        subprocess.run(
-            f"ssh -S {ssh_conn.control_path} -t -p {ssh_conn.port} {ssh_conn.user}@{ssh_conn.host} '{cmd}'",
-            shell=True
-        )
-    except Exception as e:
-        console.print(f"[bold red]Session error: {str(e)}[/bold red]")
+    ssh_conn.run_interactive_command(cmd)
     
     
 def file_create_directory(ssh_conn, path):
